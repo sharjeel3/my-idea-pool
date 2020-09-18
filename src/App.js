@@ -1,7 +1,8 @@
 import React from 'react';
+import { Skeleton } from './components/Skeleton';
 
 function App() {
-  return <div>My Idea Pool</div>;
+  return <Skeleton />;
 }
 
 export default App;

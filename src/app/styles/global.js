@@ -3,8 +3,11 @@ import { reset } from './reset';
 
 export const globalStyles = `
   ${reset}
-  body {
+  html, body {
+    font-size: 16px;
+    line-height: 1.125;
     font-family: Arial, Helvetica, sans-serif;
+    color: ${brandColors.grey};
   }
   ::selection {
     background-color: ${brandColors.green};
