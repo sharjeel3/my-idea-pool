@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 // This lets the app load faster on subsequent visits in production, and gives
 // it offline capabilities.
 
