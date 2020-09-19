@@ -2,6 +2,7 @@ import React from 'react';
 import { globalStyles } from '../../app/styles/global';
 import { WelcomeBar } from '../WelcomeBar';
 import { createGlobalStyle } from 'styled-components';
+import { Router } from './Router';
 
 const GlobalStyles = createGlobalStyle`
   ${globalStyles}
@@ -14,6 +15,7 @@ export const Skeleton = () => {
     <>
       <GlobalStyles />
       <WelcomeBar />
+      <Router />
     </>
   );
 };

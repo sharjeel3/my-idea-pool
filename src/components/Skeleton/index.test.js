@@ -8,4 +8,9 @@ describe('<Skeleton />', () => {
     expect(wrapper.find('GlobalStyles')).toExist();
     expect(wrapper.find('WelcomeBar')).toExist();
   });
+
+  it('should render Router', () => {
+    const wrapper = shallow(<Skeleton />);
+    expect(wrapper.find('Router')).toExist();
+  });
 });

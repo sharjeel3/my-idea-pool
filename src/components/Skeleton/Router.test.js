@@ -1,0 +1,27 @@
+import React from 'react';
+import { Router } from './Router';
+import { shallow } from 'enzyme';
+import { SIGN_UP } from '../../app/constants/routes';
+
+describe('<Router />', () => {
+  let wrapper;
+  beforeEach(() => {
+    wrapper = shallow(<Router />);
+  });
+
+  it('should render', () => {
+    expect(wrapper.find('BrowserRouter')).toExist();
+    expect(wrapper.find('Switch')).toExist();
+    expect(wrapper.find('Route').length).toEqual(2);
+  });
+
+  it('should render sign up route', () => {
+    expect(wrapper.find('Route').filter({ path: SIGN_UP })).toExist();
+    expect(wrapper.find('SignUp')).toExist();
+  });
+
+  it('should render default not found route', () => {
+    expect(wrapper.find('Route').filter({ path: '/' })).toExist();
+    expect(wrapper.find('NotFound')).toExist();
+  });
+});
