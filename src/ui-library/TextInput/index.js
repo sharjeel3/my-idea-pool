@@ -36,12 +36,13 @@ const Label = styled('label')`
 const Message = styled.div`
   color: ${brandColors.blueviolet};
   min-height: 1.5em;
+  margin: 0.5em 0;
 `;
 
 export const TextInput = ({ ...props }) => {
   const { onChange, type, value, placeholder, id, message, required } = props;
 
-  const handleChange = (event) => {
+  const handleChange = event => {
     onChange(event.target.value);
   };
 
