@@ -21,7 +21,7 @@ export const Login = withRouter(({ history }) => {
     if (loginSuccess) {
       history.replace(IDEAS);
     }
-  }, [loginSuccess]);
+  }, [history, loginSuccess]);
 
   const handleFormSubmit = event => {
     event.preventDefault();

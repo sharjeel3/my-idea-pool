@@ -24,7 +24,7 @@ export const SignUp = withRouter(({ history }) => {
       dispatch(resetSignup());
       history.replace(IDEAS);
     }
-  }, [signupSuccess]);
+  }, [dispatch, history, signupSuccess]);
 
   const validatePassword = password => {
     // 8 characters including 1 lowercase, 1 uppcase and 1 number
