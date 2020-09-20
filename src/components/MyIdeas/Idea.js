@@ -66,7 +66,12 @@ const EditButton = styled('button')`
 
 const DeleteButton = styled(EditButton)``;
 
-export const Idea = ({ id, content, impact, ease, confidence, average }) => {
+export const Idea = ({ id, content, impact, ease, confidence, average, onDelete }) => {
+  const handleDeleteClick = event => {
+    event.preventDefault();
+    onDelete(id);
+  };
+
   return (
     <Root>
       <IdeaContent>
@@ -94,7 +99,7 @@ export const Idea = ({ id, content, impact, ease, confidence, average }) => {
         <EditButton>
           <img src="/pen.png" alt="Edit" />
         </EditButton>
-        <DeleteButton>
+        <DeleteButton onClick={handleDeleteClick}>
           <img src="/bin.png" alt="Edit" />
         </DeleteButton>
       </Actions>
@@ -108,5 +113,6 @@ Idea.propTypes = {
   impact: PropTypes.number.isRequired,
   ease: PropTypes.number.isRequired,
   confidence: PropTypes.number.isRequired,
-  average: PropTypes.number.isRequired
+  average: PropTypes.number.isRequired,
+  onDelete: PropTypes.func.isRequired
 };

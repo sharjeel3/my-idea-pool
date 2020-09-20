@@ -4,14 +4,28 @@ import { Container } from '../../ui-library/Container';
 import { fetchIdeas } from '../../redux/actions/ideas';
 import { getMyIdeas } from '../../redux/selectors/ideas';
 import { Idea } from './Idea';
+import { showModal } from '../../redux/actions/modal';
+import { DELETE_IDEA_MODAL } from '../../app/constants/modal';
+
+// Ideally API response should return total number of pages that we can use to paginate
+const PAGE = 1;
 
 export const MyIdeas = () => {
   const dispatch = useDispatch();
   const ideas = useSelector(getMyIdeas);
 
   useEffect(() => {
-    dispatch(fetchIdeas({ page: 1 }));
+    dispatch(fetchIdeas({ page: PAGE }));
   }, [dispatch]);
+
+  const handleDeleteClick = id => {
+    dispatch(
+      showModal({
+        content: DELETE_IDEA_MODAL,
+        options: { id }
+      })
+    );
+  };
 
   return (
     <Container>
@@ -27,6 +41,7 @@ export const MyIdeas = () => {
             confidence={confidence}
             content={content}
             average={average}
+            onDelete={handleDeleteClick}
           />
         );
       })}

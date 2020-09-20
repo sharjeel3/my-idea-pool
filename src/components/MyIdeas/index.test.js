@@ -1,10 +1,12 @@
 import React from 'react';
 import { MyIdeas } from './index';
 import * as ideasActions from '../../redux/actions/ideas';
+import * as modalActions from '../../redux/actions/modal';
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
+import { DELETE_IDEA_MODAL } from '../../app/constants/modal';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -50,6 +52,35 @@ describe('<MyIdeas />', () => {
       confidence: 9,
       content: 'i am an arc developer',
       average: 9
+    });
+  });
+
+  it('should call showModal on delete click', () => {
+    const showModalSpy = jest.spyOn(modalActions, 'showModal');
+    const store = mockStore({
+      ideas: {
+        content: [
+          {
+            id: '1adzybiw21',
+            content: 'i am an arc developer',
+            impact: 9,
+            ease: 9,
+            confidence: 9,
+            average_score: 9.0,
+            created_at: 1600334688
+          }
+        ]
+      }
+    });
+    const wrapper = mount(
+      <Provider store={store}>
+        <MyIdeas />
+      </Provider>
+    );
+    wrapper.find('Idea').prop('onDelete')('1adzybiw21');
+    expect(showModalSpy).toHaveBeenCalledWith({
+      content: DELETE_IDEA_MODAL,
+      options: { id: '1adzybiw21' }
     });
   });
 });

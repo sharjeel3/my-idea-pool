@@ -12,7 +12,8 @@ describe('<Idea />', () => {
       impact: 9,
       ease: 8,
       confidence: 7,
-      average: 8.0
+      average: 8.0,
+      onDelete: jest.fn()
     };
   });
 
@@ -45,6 +46,12 @@ describe('<Idea />', () => {
       const wrapper = shallow(<Idea {...props} />);
       expect(wrapper.find('Idea__EditButton')).toExist();
       expect(wrapper.find('Idea__DeleteButton')).toExist();
+    });
+
+    it('should call onDelete when delete button is clicked', () => {
+      const wrapper = shallow(<Idea {...props} />);
+      wrapper.find('Idea__DeleteButton').simulate('click', new Event('click'));
+      expect(props.onDelete).toHaveBeenCalledWith('abc123');
     });
   });
 });

@@ -2,7 +2,8 @@ import { ideasReducer } from './index';
 import {
   FETCH_IDEAS_FAILURE,
   FETCH_IDEAS_IN_PROGRESS,
-  FETCH_IDEAS_SUCCESS
+  FETCH_IDEAS_SUCCESS,
+  REFRESH_IDEAS
 } from '../../actionTypes';
 
 describe('Ideas Reducer', () => {
@@ -26,6 +27,15 @@ describe('Ideas Reducer', () => {
   describe('FETCH_IDEAS_SUCCESS', () => {
     it('should return correct state', () => {
       const action = { type: FETCH_IDEAS_SUCCESS, content: [{ id: 'abc123' }] };
+      expect(ideasReducer({}, action)).toEqual({
+        content: [{ id: 'abc123' }]
+      });
+    });
+  });
+
+  describe('REFRESH_IDEAS', () => {
+    it('should return correct state', () => {
+      const action = { type: REFRESH_IDEAS, content: [{ id: 'abc123' }] };
       expect(ideasReducer({}, action)).toEqual({
         content: [{ id: 'abc123' }]
       });

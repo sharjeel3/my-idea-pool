@@ -1,0 +1,1 @@
+export const DELETE_IDEA_MODAL = 'DELETE_IDEA_MODAL';
