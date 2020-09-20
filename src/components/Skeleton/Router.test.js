@@ -17,11 +17,9 @@ describe('<Router />', () => {
 
   it('should render sign up route', () => {
     expect(wrapper.find('Route').filter({ path: SIGN_UP })).toExist();
-    expect(wrapper.find('SignUp')).toExist();
   });
 
   it('should render default not found route', () => {
     expect(wrapper.find('Route').filter({ path: '/' })).toExist();
-    expect(wrapper.find('NotFound')).toExist();
   });
 });

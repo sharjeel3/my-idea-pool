@@ -1,0 +1,2 @@
+export const IP_ACCESS_TOKEN = 'IP_ACCESS_TOKEN';
+export const IP_REFRESH_TOKEN = 'IP_REFRESH_TOKEN';
