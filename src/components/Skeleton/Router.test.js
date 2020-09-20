@@ -1,7 +1,7 @@
 import React from 'react';
 import { Router } from './Router';
 import { shallow } from 'enzyme';
-import { LOGIN, SIGN_UP } from '../../app/constants/routes';
+import { IDEAS, LOGIN, SIGN_UP } from '../../app/constants/routes';
 
 describe('<Router />', () => {
   let wrapper;
@@ -12,7 +12,7 @@ describe('<Router />', () => {
   it('should render', () => {
     expect(wrapper.find('BrowserRouter')).toExist();
     expect(wrapper.find('Switch')).toExist();
-    expect(wrapper.find('Route').length).toEqual(3);
+    expect(wrapper.find('Route').length).toEqual(4);
   });
 
   it('should render sign up route', () => {
@@ -21,6 +21,10 @@ describe('<Router />', () => {
 
   it('should render login route', () => {
     expect(wrapper.find('Route').filter({ path: LOGIN })).toExist();
+  });
+
+  it('should render My Ideas route', () => {
+    expect(wrapper.find('Route').filter({ path: IDEAS })).toExist();
   });
 
   it('should render default not found route', () => {

@@ -1,9 +1,10 @@
 import React from 'react';
 import { BrowserRouter as ReactRouter, Route, Switch } from 'react-router-dom';
 import { SignUp } from '../SignUp';
-import { LOGIN, SIGN_UP } from '../../app/constants/routes';
+import { IDEAS, LOGIN, SIGN_UP } from '../../app/constants/routes';
 import { NotFound } from '../NotFound';
 import { Login } from '../Login';
+import { MyIdeas } from '../MyIdeas';
 
 export const Router = () => {
   return (
@@ -14,6 +15,9 @@ export const Router = () => {
         </Route>
         <Route path={LOGIN}>
           <Login />
+        </Route>
+        <Route path={IDEAS}>
+          <MyIdeas />
         </Route>
         <Route path="/">
           <NotFound />

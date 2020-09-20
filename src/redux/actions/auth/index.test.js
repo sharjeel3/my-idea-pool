@@ -41,7 +41,8 @@ describe('Login Action Creators', () => {
         { type: LOGIN_IN_PROGRESS, value: false },
         {
           type: LOGIN_SUCCESS,
-          response: { jwt: 'jwt', refreshToken: 'refresh token' }
+          jwt: 'jwt',
+          refreshToken: 'refresh token'
         }
       ]);
       expect(window.localStorage.setItem).toHaveBeenCalledWith(IP_ACCESS_TOKEN, 'jwt');
