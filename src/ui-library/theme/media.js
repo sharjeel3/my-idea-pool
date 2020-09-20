@@ -45,7 +45,7 @@ const getPixelSizeFromBreakpoint = (breakpoint, variance) => {
   return `${numOfPixels + variance}px`;
 };
 
-const lessThan = (breakpoint) => (...args) => {
+const lessThan = breakpoint => (...args) => {
   return css`
     @media (max-width: ${getPixelSizeFromBreakpoint(breakpoint, -1)}) {
       ${css(...args)}
@@ -54,7 +54,7 @@ const lessThan = (breakpoint) => (...args) => {
 };
 
 // It behaves as greater than or equal to in practice
-const greaterThan = (breakpoint) => (...args) => {
+const greaterThan = breakpoint => (...args) => {
   return css`
     @media (min-width: ${getPixelSizeFromBreakpoint(breakpoint, 0)}) {
       ${css(...args)}
