@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter as ReactRouter, Route, Switch } from 'react-router-dom';
 import { SignUp } from '../SignUp';
-import { SIGN_UP } from '../../app/constants/routes';
+import { LOGIN, SIGN_UP } from '../../app/constants/routes';
 import { NotFound } from '../NotFound';
+import { Login } from '../Login';
 
 export const Router = () => {
   return (
@@ -10,6 +11,9 @@ export const Router = () => {
       <Switch>
         <Route path={SIGN_UP}>
           <SignUp />
+        </Route>
+        <Route path={LOGIN}>
+          <Login />
         </Route>
         <Route path="/">
           <NotFound />

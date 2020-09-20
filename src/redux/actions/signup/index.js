@@ -9,7 +9,7 @@ import lodashGet from 'lodash.get';
 import { DEFAULT_ERROR_MESSAGE } from '../../../app/constants/errors';
 import { IP_ACCESS_TOKEN, IP_REFRESH_TOKEN } from '../../../app/constants/tokens';
 
-const saveTokens = ({ jwt, refreshToken }) => {
+export const saveTokens = ({ jwt, refreshToken }) => {
   const localStorage = window.localStorage;
   localStorage.setItem(IP_ACCESS_TOKEN, jwt);
   localStorage.setItem(IP_REFRESH_TOKEN, refreshToken);
