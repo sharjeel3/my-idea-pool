@@ -58,6 +58,8 @@ The build is minified and the filenames include the hashes. Use `serve -s build`
 
 ## What's been done
 
+This application is a PWA built with React and Redux.
+
 #### 1. Authentication feature
 
 I have added two routes `/signup` and `/login` where users can create an account and login respectively.
