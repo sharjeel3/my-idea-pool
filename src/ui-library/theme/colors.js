@@ -6,6 +6,7 @@ export const brandColors = {
   blueGrey: '#455e70',
   lightGrey: 'rgba(42, 56, 66, 0.6)',
   border: 'rgba(42, 56, 66, 0.2)',
+  border2: '#979797',
   white: '#ffffff',
   black: '#000000',
   blueviolet: 'blueviolet'

@@ -1,23 +1,45 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
+import { media } from '../../ui-library/theme/media';
+import { brandColors } from '../../ui-library/theme/colors';
 
 const Input = styled('input')`
-  background-image: linear-gradient(-180deg, #f2f2f2 0%, #d4d4d4 100%);
-  border: 1px solid #979797;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), inset 0 2px 0 0 #ffffff;
-  border-radius: 3px;
+  pointer-events: none;
   height: 2.25em;
   line-height: 2.25em;
-  padding: 0 0.5em;
   width: 100%;
+  border-bottom: 1px solid transparent;
+  ${media.greaterThan('lg')`
+    flex-basis: 65%;
+    padding: 0;
+    height: 2.75em;
+    line-height: 2.75em;
+    margin-right: 3.6em;
+  `}
+  ${props =>
+    props.isEditMode &&
+    `
+    pointer-events: all;
+    border-bottom-color: ${brandColors.lightGrey};
+  `}
 `;
 
-export const TitleInput = ({ value, onChange }) => {
-  return <Input type="text" value={value} onChange={event => onChange(event.target.value)} />;
+export const TitleInput = ({ value, onChange, isEditMode }) => {
+  return (
+    <Input
+      required
+      type="text"
+      value={value}
+      isEditMode={isEditMode}
+      readOnly={!isEditMode}
+      onChange={event => onChange(event.target.value)}
+    />
+  );
 };
 
 TitleInput.propTypes = {
   value: PropTypes.string.isRequired,
+  isEditMode: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired
 };

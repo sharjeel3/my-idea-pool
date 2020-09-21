@@ -19,7 +19,9 @@ describe('<Idea />', () => {
       onDelete: jest.fn(),
       onAddCancel: jest.fn(),
       onAddConfirm: jest.fn(),
-      onEdit: jest.fn()
+      onEdit: jest.fn(),
+      isDeleteIdeaModalActiveNow: false,
+      activeModalOptions: {}
     };
   });
 
@@ -31,15 +33,18 @@ describe('<Idea />', () => {
     });
 
     it('shuold render impact score', () => {
-      expect(wrapper.find({ id: 'impact-score-abc123' })).toHaveText('Impact9');
+      wrapper = mount(<Idea {...props} />);
+      expect(wrapper.find({ id: 'impact-score-abc123' }).find('input')).toHaveValue(9);
     });
 
     it('shuold render confidence score', () => {
-      expect(wrapper.find({ id: 'confidence-score-abc123' })).toHaveText('Confidence7');
+      wrapper = mount(<Idea {...props} />);
+      expect(wrapper.find({ id: 'confidence-score-abc123' }).find('input')).toHaveValue(7);
     });
 
     it('shuold render ease score', () => {
-      expect(wrapper.find({ id: 'ease-score-abc123' })).toHaveText('Ease8');
+      wrapper = mount(<Idea {...props} />);
+      expect(wrapper.find({ id: 'ease-score-abc123' }).find('input')).toHaveValue(8);
     });
 
     it('shuold render average score', () => {

@@ -1,10 +1,10 @@
 import React from 'react';
 import { NotFound } from './index';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 
 describe('<NotFound />', () => {
   it('should render Global Styles and WelcomeBar', () => {
-    const wrapper = shallow(<NotFound />);
-    expect(wrapper).toHaveText('Not Found...');
+    const wrapper = mount(<NotFound />);
+    expect(wrapper.find('Title')).toHaveText('Not Found...');
   });
 });

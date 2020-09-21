@@ -14,7 +14,7 @@ const mockStore = configureStore(middlewares);
 describe('<MyIdeas />', () => {
   it('should fetch ideas', () => {
     const fetchIdeasSpy = jest.spyOn(ideasActions, 'fetchIdeas');
-    const store = mockStore({ ideas: { content: [] } });
+    const store = mockStore({ ideas: { content: [] }, modal: {} });
     mount(
       <Provider store={store}>
         <MyIdeas />
@@ -25,6 +25,7 @@ describe('<MyIdeas />', () => {
 
   it('should render ideas', () => {
     const store = mockStore({
+      modal: {},
       ideas: {
         content: [
           {
@@ -58,6 +59,7 @@ describe('<MyIdeas />', () => {
   it('should call showModal on delete click', () => {
     const showModalSpy = jest.spyOn(modalActions, 'showModal');
     const store = mockStore({
+      modal: {},
       ideas: {
         content: [
           {
@@ -87,6 +89,7 @@ describe('<MyIdeas />', () => {
   it('should call updateIdea on edit click', () => {
     const updateIdeaSpy = jest.spyOn(ideasActions, 'updateIdea');
     const store = mockStore({
+      modal: {},
       ideas: {
         content: [
           {
@@ -120,6 +123,7 @@ describe('<MyIdeas />', () => {
   it('should call addNewIdeaScaffold on Add idea click', () => {
     const addNewIdeaScaffoldSpy = jest.spyOn(ideasActions, 'addNewIdeaScaffold');
     const store = mockStore({
+      modal: {},
       ideas: {
         content: []
       }
@@ -136,6 +140,7 @@ describe('<MyIdeas />', () => {
   it('should call deleteNewIdeaScaffold on cancel add click', () => {
     const deleteNewIdeaScaffoldSpy = jest.spyOn(ideasActions, 'deleteNewIdeaScaffold');
     const store = mockStore({
+      modal: {},
       ideas: {
         content: [
           {
@@ -163,6 +168,7 @@ describe('<MyIdeas />', () => {
   it('should call addIdea on confirm add click', () => {
     const addIdeaSpy = jest.spyOn(ideasActions, 'addIdea');
     const store = mockStore({
+      modal: {},
       ideas: {
         content: [
           {

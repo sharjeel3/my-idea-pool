@@ -15,6 +15,8 @@ import { DELETE_IDEA_MODAL } from '../../app/constants/modal';
 import { PageHeader } from '../../ui-library/PageHeader';
 import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
+import { media } from '../../ui-library/theme/media';
+import { getModalOptions, isDeleteIdeaModalActive } from '../../redux/selectors/modal';
 
 // Ideally API response should return total number of pages that we can use to paginate
 const PAGE = 1;
@@ -22,6 +24,10 @@ const PAGE = 1;
 const AddIdeaButton = styled('button')`
   width: 2em;
   height: 2em;
+  ${media.greaterThan('lg')`
+    width: 3.125em;
+    height: 3.125em;
+  `}
 `;
 
 const AddIdea = ({ onClick }) => {
@@ -39,6 +45,8 @@ AddIdea.propTypes = {
 export const MyIdeas = () => {
   const dispatch = useDispatch();
   const ideas = useSelector(getMyIdeas);
+  const isDeleteIdeaModalActiveNow = useSelector(isDeleteIdeaModalActive);
+  const activeModalOptions = useSelector(getModalOptions);
 
   useEffect(() => {
     dispatch(fetchIdeas({ page: PAGE }));
@@ -88,6 +96,8 @@ export const MyIdeas = () => {
             onAddCancel={handleAddIdeaCancelClick}
             onAddConfirm={handleAddIdeaConfirmClick}
             onEdit={handleEditConfirmClick}
+            isDeleteIdeaModalActiveNow={isDeleteIdeaModalActiveNow}
+            activeModalOptions={activeModalOptions}
           />
         );
       })}
