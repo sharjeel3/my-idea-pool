@@ -10,7 +10,7 @@ import {
 
 const INITIAL_STATE = {
   content: [],
-  fetchInProgress: false,
+  fetchInProgress: true,
   fetchError: ''
 };
 

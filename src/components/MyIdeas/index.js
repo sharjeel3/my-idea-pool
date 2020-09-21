@@ -8,7 +8,7 @@ import {
   fetchIdeas,
   updateIdea
 } from '../../redux/actions/ideas';
-import { getMyIdeas } from '../../redux/selectors/ideas';
+import { getMyIdeas, isFetchIdeasInProgress } from '../../redux/selectors/ideas';
 import { Idea } from './Idea';
 import { showModal } from '../../redux/actions/modal';
 import { DELETE_IDEA_MODAL } from '../../app/constants/modal';
@@ -20,6 +20,17 @@ import { getModalOptions, isDeleteIdeaModalActive } from '../../redux/selectors/
 
 // Ideally API response should return total number of pages that we can use to paginate
 const PAGE = 1;
+
+const Root = styled(Container)`
+  ${media.greaterThan('lg')`
+    ${props =>
+      !props.hasIdeas &&
+      `
+      display: flex;
+      flex-direction: column;
+    `}
+  `}
+`;
 
 const AddIdeaButton = styled('button')`
   width: 2em;
@@ -42,11 +53,30 @@ AddIdea.propTypes = {
   onClick: PropTypes.func.isRequired
 };
 
+const HasIdeasWrap = styled('div')`
+  margin: 5em 0;
+  text-align: center;
+  img {
+    margin-bottom: 1.4375em;
+  }
+  ${media.greaterThan('lg')`
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 0;
+  `}
+`;
+
 export const MyIdeas = () => {
   const dispatch = useDispatch();
   const ideas = useSelector(getMyIdeas);
+  const isFetchingIdeas = useSelector(isFetchIdeasInProgress);
   const isDeleteIdeaModalActiveNow = useSelector(isDeleteIdeaModalActive);
   const activeModalOptions = useSelector(getModalOptions);
+
+  const hasIdeas = ideas.length > 0;
 
   useEffect(() => {
     dispatch(fetchIdeas({ page: PAGE }));
@@ -78,8 +108,14 @@ export const MyIdeas = () => {
   };
 
   return (
-    <Container>
+    <Root hasIdeas={hasIdeas}>
       <PageHeader title="My Ideas" Action={() => <AddIdea onClick={handleAddIdeaClick} />} />
+      {!hasIdeas && !isFetchingIdeas && (
+        <HasIdeasWrap>
+          <img src="/bulb.png" alt="Ideas" />
+          <div>Got Ideas?</div>
+        </HasIdeasWrap>
+      )}
       {ideas.map(idea => {
         const { id, ease, impact, confidence, average_score: average, content, mode } = idea;
         return (
@@ -101,6 +137,6 @@ export const MyIdeas = () => {
           />
         );
       })}
-    </Container>
+    </Root>
   );
 };

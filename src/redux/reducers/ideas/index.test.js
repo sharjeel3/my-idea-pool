@@ -12,7 +12,7 @@ describe('Ideas Reducer', () => {
   it('should return initial state', () => {
     expect(ideasReducer(undefined, { type: 'test' })).toEqual({
       content: [],
-      fetchInProgress: false,
+      fetchInProgress: true,
       fetchError: ''
     });
   });
