@@ -12,7 +12,7 @@ describe('<Router />', () => {
   it('should render', () => {
     expect(wrapper.find('BrowserRouter')).toExist();
     expect(wrapper.find('Switch')).toExist();
-    expect(wrapper.find('Route').length).toEqual(4);
+    expect(wrapper.find('Route').length).toEqual(5);
   });
 
   it('should render sign up route', () => {
@@ -25,6 +25,10 @@ describe('<Router />', () => {
 
   it('should render My Ideas route', () => {
     expect(wrapper.find('Route').filter({ path: IDEAS })).toExist();
+  });
+
+  it('should render Home route', () => {
+    expect(wrapper.find('Route').filter({ path: '/', exact: true })).toExist();
   });
 
   it('should render default not found route', () => {

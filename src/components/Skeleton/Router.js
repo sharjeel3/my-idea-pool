@@ -5,6 +5,7 @@ import { IDEAS, LOGIN, SIGN_UP } from '../../app/constants/routes';
 import { NotFound } from '../NotFound';
 import { Login } from '../Login';
 import { MyIdeas } from '../MyIdeas';
+import { Home } from '../Home';
 
 export const Router = () => {
   return (
@@ -18,6 +19,9 @@ export const Router = () => {
         </Route>
         <Route path={IDEAS}>
           <MyIdeas />
+        </Route>
+        <Route exact path="/">
+          <Home />
         </Route>
         <Route path="/">
           <NotFound />

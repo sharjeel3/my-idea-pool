@@ -8,9 +8,10 @@ import { createAccount, resetSignup } from '../../redux/actions/signup';
 import { ErrorMessage } from '../../ui-library/ErrorMessage';
 import { getSignupErrorMessage, getSignupSuccess } from '../../redux/selectors/signup';
 import { withRouter } from 'react-router-dom';
-import { IDEAS } from '../../app/constants/routes';
+import { IDEAS, LOGIN } from '../../app/constants/routes';
 import { Title } from '../../ui-library/Title';
-import { Wrap } from '../Login';
+import { ActionsWrap, Instructions, Wrap } from '../Login';
+import { TextLink } from '../../ui-library/TextLink';
 
 export const SignUp = withRouter(({ history }) => {
   const dispatch = useDispatch();
@@ -71,7 +72,13 @@ export const SignUp = withRouter(({ history }) => {
             required
           />
           {errorMessage && <ErrorMessage message={errorMessage} />}
-          <Button>Sign Up</Button>
+          <ActionsWrap>
+            <Button>Sign up</Button>
+            <Instructions>
+              <span>Already have an account? </span>
+              <TextLink to={LOGIN}>Login</TextLink>
+            </Instructions>
+          </ActionsWrap>
         </Form>
       </Wrap>
     </Container>
