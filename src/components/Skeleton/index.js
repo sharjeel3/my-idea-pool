@@ -3,6 +3,8 @@ import { globalStyles } from '../../app/styles/global';
 import { WelcomeBar } from '../WelcomeBar';
 import { createGlobalStyle } from 'styled-components';
 import { Router } from './Router';
+import styled from 'styled-components/macro';
+import { media } from '../../ui-library/theme/media';
 
 const GlobalStyles = createGlobalStyle`
   ${globalStyles}
@@ -10,12 +12,26 @@ const GlobalStyles = createGlobalStyle`
 
 GlobalStyles.displayName = 'GlobalStyles';
 
+const Root = styled('div')`
+  margin: 0 auto;
+  ${media.greaterThan('lg')`
+    max-width: 960px;
+    display: flex;
+    min-height: 100vh;
+  `}
+  ${media.greaterThan('xlg')`
+    max-width: 1140px;
+  `}
+`;
+
 export const Skeleton = () => {
   return (
     <>
       <GlobalStyles />
-      <WelcomeBar />
-      <Router />
+      <Root>
+        <WelcomeBar />
+        <Router />
+      </Root>
     </>
   );
 };

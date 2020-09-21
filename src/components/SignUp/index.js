@@ -10,6 +10,7 @@ import { getSignupErrorMessage, getSignupSuccess } from '../../redux/selectors/s
 import { withRouter } from 'react-router-dom';
 import { IDEAS } from '../../app/constants/routes';
 import { Title } from '../../ui-library/Title';
+import { Wrap } from '../Login';
 
 export const SignUp = withRouter(({ history }) => {
   const dispatch = useDispatch();
@@ -48,29 +49,31 @@ export const SignUp = withRouter(({ history }) => {
 
   return (
     <Container>
-      <Title title="Sign Up" />
-      <Form onSubmit={handleFormSubmit}>
-        <TextInput id="signup-name" required value={name} onChange={setName} placeholder="Name" />
-        <TextInput
-          id="signup-email"
-          value={email}
-          onChange={setEmail}
-          placeholder="Email"
-          type="email"
-          required
-        />
-        <TextInput
-          id="signup-password"
-          value={password}
-          onChange={setPassword}
-          placeholder="Password"
-          type="password"
-          message={passwordError}
-          required
-        />
-        {errorMessage && <ErrorMessage message={errorMessage} />}
-        <Button>Sign Up</Button>
-      </Form>
+      <Wrap>
+        <Title title="Sign Up" />
+        <Form onSubmit={handleFormSubmit}>
+          <TextInput id="signup-name" required value={name} onChange={setName} placeholder="Name" />
+          <TextInput
+            id="signup-email"
+            value={email}
+            onChange={setEmail}
+            placeholder="Email"
+            type="email"
+            required
+          />
+          <TextInput
+            id="signup-password"
+            value={password}
+            onChange={setPassword}
+            placeholder="Password"
+            type="password"
+            message={passwordError}
+            required
+          />
+          {errorMessage && <ErrorMessage message={errorMessage} />}
+          <Button>Sign Up</Button>
+        </Form>
+      </Wrap>
     </Container>
   );
 });

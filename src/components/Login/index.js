@@ -10,6 +10,15 @@ import { getLoginErrorMessage, getLoginSuccess } from '../../redux/selectors/aut
 import { withRouter } from 'react-router-dom';
 import { IDEAS } from '../../app/constants/routes';
 import { Title } from '../../ui-library/Title';
+import styled from 'styled-components/macro';
+import { media } from '../../ui-library/theme/media';
+
+export const Wrap = styled('div')`
+  ${media.greaterThan('lg')`
+    max-width: 50%;
+    margin: 10em auto 0;
+  `}
+`;
 
 export const Login = withRouter(({ history }) => {
   const dispatch = useDispatch();
@@ -31,27 +40,29 @@ export const Login = withRouter(({ history }) => {
 
   return (
     <Container>
-      <Title title="Login" />
-      <Form onSubmit={handleFormSubmit}>
-        <TextInput
-          id="login-email"
-          value={email}
-          onChange={setEmail}
-          placeholder="Email"
-          type="email"
-          required
-        />
-        <TextInput
-          id="login-password"
-          value={password}
-          onChange={setPassword}
-          placeholder="Password"
-          type="password"
-          required
-        />
-        {errorMessage && <ErrorMessage message={errorMessage} />}
-        <Button>log in</Button>
-      </Form>
+      <Wrap>
+        <Title title="Login" />
+        <Form onSubmit={handleFormSubmit}>
+          <TextInput
+            id="login-email"
+            value={email}
+            onChange={setEmail}
+            placeholder="Email"
+            type="email"
+            required
+          />
+          <TextInput
+            id="login-password"
+            value={password}
+            onChange={setPassword}
+            placeholder="Password"
+            type="password"
+            required
+          />
+          {errorMessage && <ErrorMessage message={errorMessage} />}
+          <Button>log in</Button>
+        </Form>
+      </Wrap>
     </Container>
   );
 });

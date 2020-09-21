@@ -23,10 +23,11 @@ const StyledContainer = styled.div`
   `}
 `;
 
-export const Container = ({ children }) => {
-  return <StyledContainer>{children}</StyledContainer>;
+export const Container = ({ children, className }) => {
+  return <StyledContainer className={className}>{children}</StyledContainer>;
 };
 
 Container.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]).isRequired,
+  className: PropTypes.string
 };
