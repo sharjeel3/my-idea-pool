@@ -6,7 +6,8 @@ import {
   LOGIN_SUCCESS,
   UPDATE_ACCESS_TOKEN,
   UPDATE_TOKENS,
-  RESET_AUTH
+  RESET_AUTH,
+  FETCH_USER_IN_PROGRESS
 } from '../../actionTypes';
 
 const INITIAL_STATE = {
@@ -18,7 +19,7 @@ const INITIAL_STATE = {
   name: '',
   email: '',
   avatarUrl: '',
-  fetchUserInProgress: false,
+  fetchUserInProgress: true,
   fetchUserSuccess: false,
   fetchUserError: ''
 };
@@ -37,6 +38,9 @@ export const authReducer = createReducer(INITIAL_STATE, {
     state.name = action.name;
     state.email = action.email;
     state.avatarUrl = action.avatarUrl;
+  },
+  [FETCH_USER_IN_PROGRESS]: (state, action) => {
+    state.fetchUserInProgress = action.value;
   },
   [LOGIN_FAILURE]: (state, action) => {
     state.loginError = action.error;

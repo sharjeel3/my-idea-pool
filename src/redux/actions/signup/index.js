@@ -7,13 +7,7 @@ import {
 } from '../../actionTypes';
 import lodashGet from 'lodash.get';
 import { DEFAULT_ERROR_MESSAGE } from '../../../app/constants/errors';
-import { IP_ACCESS_TOKEN, IP_REFRESH_TOKEN } from '../../../app/constants/tokens';
-
-export const saveTokens = ({ jwt, refreshToken }) => {
-  const localStorage = window.localStorage;
-  localStorage.setItem(IP_ACCESS_TOKEN, jwt);
-  localStorage.setItem(IP_REFRESH_TOKEN, refreshToken);
-};
+import { saveTokens, updateTokens } from '../auth';
 
 export const resetSignup = () => ({
   type: RESET_SIGNUP
@@ -44,12 +38,9 @@ export const createAccount = ({ name, email, password }) => async dispatch => {
       refreshToken
     });
     dispatch({
-      type: SIGNUP_SUCCESS,
-      response: {
-        jwt,
-        refreshToken
-      }
+      type: SIGNUP_SUCCESS
     });
+    dispatch(updateTokens({ jwt, refreshToken }));
   } catch (e) {
     dispatch({ type: SIGNUP_IN_PROGRESS, value: false });
     dispatch({ type: SIGNUP_FAILURE, error: DEFAULT_ERROR_MESSAGE });

@@ -6,6 +6,7 @@ import { NotFound } from '../NotFound';
 import { Login } from '../Login';
 import { MyIdeas } from '../MyIdeas';
 import { Home } from '../Home';
+import { SecureRoute } from './SecureRoute';
 
 export const Router = () => {
   return (
@@ -17,9 +18,9 @@ export const Router = () => {
         <Route path={LOGIN}>
           <Login />
         </Route>
-        <Route path={IDEAS}>
+        <SecureRoute path={IDEAS}>
           <MyIdeas />
-        </Route>
+        </SecureRoute>
         <Route exact path="/">
           <Home />
         </Route>

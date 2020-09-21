@@ -6,7 +6,8 @@ import {
   RESET_SIGNUP,
   SIGNUP_FAILURE,
   SIGNUP_IN_PROGRESS,
-  SIGNUP_SUCCESS
+  SIGNUP_SUCCESS,
+  UPDATE_TOKENS
 } from '../../actionTypes';
 import { IP_ACCESS_TOKEN, IP_REFRESH_TOKEN } from '../../../app/constants/tokens';
 import { DEFAULT_ERROR_MESSAGE } from '../../../app/constants/errors';
@@ -45,10 +46,8 @@ describe('Signup Action Creators', () => {
       expect(store.getActions()).toEqual([
         { type: SIGNUP_IN_PROGRESS, value: true },
         { type: SIGNUP_IN_PROGRESS, value: false },
-        {
-          type: SIGNUP_SUCCESS,
-          response: { jwt: 'jwt', refreshToken: 'refresh token' }
-        }
+        { type: SIGNUP_SUCCESS },
+        { type: UPDATE_TOKENS, jwt: 'jwt', refreshToken: 'refresh token' }
       ]);
       expect(window.localStorage.setItem).toHaveBeenCalledWith(IP_ACCESS_TOKEN, 'jwt');
       expect(window.localStorage.setItem).toHaveBeenCalledWith(IP_REFRESH_TOKEN, 'refresh token');

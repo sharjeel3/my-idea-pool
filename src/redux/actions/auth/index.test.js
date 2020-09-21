@@ -1,7 +1,7 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
-import { login } from './index';
+import { login, refreshAccessToken } from './index';
 import {
   FETCH_USER_IN_PROGRESS,
   LOGIN_FAILURE,
@@ -14,7 +14,7 @@ import { DEFAULT_ERROR_MESSAGE } from '../../../app/constants/errors';
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
-describe('Login Action Creators', () => {
+describe('Auth Action Creators', () => {
   describe('login()', () => {
     let store;
     beforeEach(() => {
@@ -100,6 +100,48 @@ describe('Login Action Creators', () => {
         }
       ]);
       expect(window.localStorage.setItem).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('refreshToken()', () => {
+    let store;
+    beforeEach(() => {
+      moxios.install();
+      store = mockStore({ auth: {} });
+    });
+
+    afterEach(() => {
+      moxios.uninstall();
+      jest.clearAllMocks();
+    });
+
+    it('should renew jwt and fetch user', async () => {
+      localStorage.getItem.mockReturnValue('refresh token');
+      moxios.wait(() => {
+        const request = moxios.requests.mostRecent();
+        request.respondWith({
+          status: 200,
+          response: { jwt: 'new-jwt' }
+        });
+      });
+      await store.dispatch(refreshAccessToken());
+      expect(store.getActions()).toEqual([
+        { type: 'UPDATE_ACCESS_TOKEN', jwt: 'new-jwt' },
+        { type: 'FETCH_USER_IN_PROGRESS', value: true }
+      ]);
+    });
+
+    it('should not renew jwt when refresh token is not availabe', async () => {
+      localStorage.getItem.mockReturnValue(null);
+      moxios.wait(() => {
+        const request = moxios.requests.mostRecent();
+        request.respondWith({
+          status: 200,
+          response: { jwt: 'new-jwt' }
+        });
+      });
+      await store.dispatch(refreshAccessToken());
+      expect(store.getActions()).toEqual([]);
     });
   });
 });

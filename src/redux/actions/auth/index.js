@@ -6,12 +6,19 @@ import {
   LOGIN_FAILURE,
   LOGIN_IN_PROGRESS,
   LOGIN_SUCCESS,
-  RESET_AUTH
+  RESET_AUTH,
+  UPDATE_ACCESS_TOKEN,
+  UPDATE_TOKENS
 } from '../../actionTypes';
 import lodashGet from 'lodash.get';
 import { DEFAULT_ERROR_MESSAGE } from '../../../app/constants/errors';
-import { saveTokens } from '../signup';
 import { IP_ACCESS_TOKEN, IP_REFRESH_TOKEN } from '../../../app/constants/tokens';
+
+export const saveTokens = ({ jwt, refreshToken }) => {
+  const localStorage = window.localStorage;
+  localStorage.setItem(IP_ACCESS_TOKEN, jwt);
+  localStorage.setItem(IP_REFRESH_TOKEN, refreshToken);
+};
 
 const removeTokensFromDevice = () => {
   window.localStorage.removeItem(IP_ACCESS_TOKEN);
@@ -110,7 +117,18 @@ export const logout = () => async dispatch => {
   }
 };
 
-export const refreshToken = () => dispatch => {
+export const updateTokens = ({ jwt, refreshToken }) => ({
+  type: UPDATE_TOKENS,
+  jwt,
+  refreshToken
+});
+
+export const updateAccessToken = ({ jwt }) => ({
+  type: UPDATE_ACCESS_TOKEN,
+  jwt
+});
+
+export const refreshAccessToken = () => async dispatch => {
   const localStorage = window.localStorage;
   let interval;
   const refreshToken = localStorage.getItem(IP_REFRESH_TOKEN);
@@ -126,15 +144,20 @@ export const refreshToken = () => dispatch => {
       removeTokensFromDevice();
       clearInterval(interval);
     } else if (response) {
-      localStorage.setItem(IP_ACCESS_TOKEN, response.jwt);
+      const { jwt } = response;
+      localStorage.setItem(IP_ACCESS_TOKEN, jwt);
+      dispatch(updateAccessToken({ jwt }));
+      dispatch(fetchUser());
     }
   };
   if (refreshToken) {
-    refreshFn(refreshToken);
-    dispatch(fetchUser());
-    interval = setInterval(() => {
-      refreshFn(refreshToken);
-      dispatch(fetchUser());
+    try {
+      await refreshFn(refreshToken);
+    } catch (e) {}
+    interval = setInterval(async () => {
+      try {
+        await refreshFn(refreshToken);
+      } catch (e) {}
     }, 540000);
   }
 };

@@ -19,7 +19,7 @@ describe('Auth Reducer', () => {
       name: '',
       email: '',
       avatarUrl: '',
-      fetchUserInProgress: false,
+      fetchUserInProgress: true,
       fetchUserSuccess: false,
       fetchUserError: ''
     });
