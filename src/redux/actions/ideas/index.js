@@ -1,5 +1,10 @@
 import { secureRequest } from '../../../libs/request';
 import {
+  ADD_IDEA,
+  ADD_IDEA_FAILURE,
+  ADD_IDEA_IN_PROGRESS,
+  ADD_IDEA_SUCCESS,
+  DELETE_IDEA,
   DELETE_IDEA_FAILURE,
   DELETE_IDEA_IN_PROGRESS,
   DELETE_IDEA_SUCCESS,
@@ -14,6 +19,7 @@ import {
 import lodashGet from 'lodash.get';
 import { DEFAULT_ERROR_MESSAGE } from '../../../app/constants/errors';
 import { getMyIdeas } from '../../selectors/ideas';
+import { EDIT } from '../../../app/constants/idea';
 
 const refreshIdeas = content => ({
   type: REFRESH_IDEAS,
@@ -96,9 +102,6 @@ export const updateIdea = ({ id, content, impact, ease, confidence }) => async (
     }
     const ideas = getMyIdeas(getState());
     const updatedIdeas = ideas.map(idea => {
-      if (idea.id !== id) {
-        return idea;
-      }
       return idea.id === id ? { ...response } : idea;
     });
     dispatch({
@@ -110,6 +113,67 @@ export const updateIdea = ({ id, content, impact, ease, confidence }) => async (
     dispatch({ type: UPDATE_IDEA_IN_PROGRESS, value: false });
     dispatch({
       type: UPDATE_IDEA_FAILURE,
+      error: DEFAULT_ERROR_MESSAGE
+    });
+  }
+};
+
+export const addNewIdeaScaffold = () => {
+  const idea = {
+    id: `${Math.ceil(1000 * Math.random())}`,
+    content: '',
+    impact: 10,
+    ease: 10,
+    confidence: 10,
+    average_score: 10.0,
+    created_at: new Date().getTime(),
+    mode: EDIT
+  };
+
+  return {
+    type: ADD_IDEA,
+    idea
+  };
+};
+
+export const deleteNewIdeaScaffold = id => {
+  return {
+    type: DELETE_IDEA,
+    id
+  };
+};
+
+export const addIdea = ({ id, content, impact, ease, confidence }) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({ type: ADD_IDEA_IN_PROGRESS, value: true });
+    const [error, response] = await secureRequest({
+      url: `/ideas`,
+      method: 'POST',
+      data: { content, impact, ease, confidence }
+    });
+    dispatch({ type: ADD_IDEA_IN_PROGRESS, value: false });
+    if (error) {
+      return dispatch({
+        type: ADD_IDEA_FAILURE,
+        error: lodashGet(error, 'data.reason', DEFAULT_ERROR_MESSAGE)
+      });
+    }
+    const ideas = getMyIdeas(getState());
+    const updatedIdeas = ideas.map(idea => {
+      return idea.id === id ? { ...response } : idea;
+    });
+    dispatch({
+      type: ADD_IDEA_SUCCESS,
+      value: true
+    });
+    dispatch(refreshIdeas(updatedIdeas));
+  } catch (e) {
+    dispatch({ type: ADD_IDEA_IN_PROGRESS, value: false });
+    dispatch({
+      type: ADD_IDEA_FAILURE,
       error: DEFAULT_ERROR_MESSAGE
     });
   }

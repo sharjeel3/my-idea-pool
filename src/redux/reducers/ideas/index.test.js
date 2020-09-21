@@ -3,7 +3,9 @@ import {
   FETCH_IDEAS_FAILURE,
   FETCH_IDEAS_IN_PROGRESS,
   FETCH_IDEAS_SUCCESS,
-  REFRESH_IDEAS
+  REFRESH_IDEAS,
+  ADD_IDEA,
+  DELETE_IDEA
 } from '../../actionTypes';
 
 describe('Ideas Reducer', () => {
@@ -47,6 +49,26 @@ describe('Ideas Reducer', () => {
       const action = { type: FETCH_IDEAS_FAILURE, error: 'fail' };
       expect(ideasReducer({}, action)).toEqual({
         fetchError: 'fail'
+      });
+    });
+  });
+
+  describe('ADD_IDEA', () => {
+    it('should return correct state', () => {
+      const state = { content: [{ id: '123' }] };
+      const action = { type: ADD_IDEA, idea: { id: '789' } };
+      expect(ideasReducer(state, action)).toEqual({
+        content: [{ id: '789' }, { id: '123' }]
+      });
+    });
+  });
+
+  describe('DELETE_IDEA', () => {
+    it('should return correct state', () => {
+      const state = { content: [{ id: '789' }, { id: '123' }] };
+      const action = { type: DELETE_IDEA, id: '789' };
+      expect(ideasReducer(state, action)).toEqual({
+        content: [{ id: '123' }]
       });
     });
   });

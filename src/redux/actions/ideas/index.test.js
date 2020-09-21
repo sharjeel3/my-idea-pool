@@ -1,7 +1,14 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
-import { fetchIdeas, deleteIdea, updateIdea } from './index';
+import {
+  fetchIdeas,
+  deleteIdea,
+  updateIdea,
+  addIdea,
+  addNewIdeaScaffold,
+  deleteNewIdeaScaffold
+} from './index';
 import {
   FETCH_IDEAS_SUCCESS,
   FETCH_IDEAS_IN_PROGRESS,
@@ -12,9 +19,14 @@ import {
   REFRESH_IDEAS,
   UPDATE_IDEA_IN_PROGRESS,
   UPDATE_IDEA_SUCCESS,
-  UPDATE_IDEA_FAILURE
+  UPDATE_IDEA_FAILURE,
+  ADD_IDEA_IN_PROGRESS,
+  ADD_IDEA_SUCCESS,
+  ADD_IDEA_FAILURE,
+  DELETE_IDEA
 } from '../../actionTypes';
 import { DEFAULT_ERROR_MESSAGE } from '../../../app/constants/errors';
+import { EDIT } from '../../../app/constants/idea';
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -166,6 +178,30 @@ describe('Ideas Action Creators', () => {
     });
   });
 
+  describe('addNewIdeaScaffold()', () => {
+    it('should return action', () => {
+      expect(addNewIdeaScaffold()).toMatchObject({
+        idea: {
+          content: '',
+          impact: 10,
+          ease: 10,
+          confidence: 10,
+          average_score: 10.0,
+          mode: EDIT
+        }
+      });
+    });
+  });
+
+  describe('deleteNewIdeaScaffold()', () => {
+    it('should return action', () => {
+      expect(deleteNewIdeaScaffold('123')).toEqual({
+        type: DELETE_IDEA,
+        id: '123'
+      });
+    });
+  });
+
   describe('updateIdea()', () => {
     let store;
     beforeEach(() => {
@@ -233,6 +269,80 @@ describe('Ideas Action Creators', () => {
       await store.dispatch(updateIdea({ id: 'abc123', content: 'new content' }));
       expect(store.getActions()[2]).toEqual({
         type: UPDATE_IDEA_FAILURE,
+        error: DEFAULT_ERROR_MESSAGE
+      });
+    });
+  });
+
+  describe('addIdea()', () => {
+    let store;
+    beforeEach(() => {
+      moxios.install();
+      store = mockStore({
+        auth: {},
+        ideas: {
+          content: [
+            { id: '123', content: 'new content 123' },
+            { id: 'abc123', content: 'dev idea' },
+            { id: 'xyz987', content: 'new idea' },
+            { id: 'acd456', content: 'some idea' }
+          ]
+        }
+      });
+    });
+
+    afterEach(() => {
+      moxios.uninstall();
+    });
+
+    it('should return actions for successful addition', async () => {
+      moxios.wait(() => {
+        const request = moxios.requests.mostRecent();
+        request.respondWith({
+          status: 200,
+          response: { id: 'qwe123', content: 'new content 123' }
+        });
+      });
+      await store.dispatch(addIdea({ id: '123', content: 'new content 123' }));
+      expect(store.getActions()).toEqual([
+        { type: ADD_IDEA_IN_PROGRESS, value: true },
+        { type: ADD_IDEA_IN_PROGRESS, value: false },
+        { type: ADD_IDEA_SUCCESS, value: true },
+        {
+          type: REFRESH_IDEAS,
+          content: [
+            { id: 'qwe123', content: 'new content 123' },
+            { id: 'abc123', content: 'dev idea' },
+            { id: 'xyz987', content: 'new idea' },
+            { id: 'acd456', content: 'some idea' }
+          ]
+        }
+      ]);
+    });
+
+    it('should return actions for update error', async () => {
+      moxios.wait(() => {
+        const request = moxios.requests.mostRecent();
+        request.respondWith({
+          status: 400,
+          response: { reason: 'Invalid request' }
+        });
+      });
+      await store.dispatch(addIdea({ id: '123', content: 'new content 123' }));
+      expect(store.getActions()[2]).toEqual({
+        type: ADD_IDEA_FAILURE,
+        error: 'Invalid request'
+      });
+    });
+
+    it('should return actions for unexpected failure', async () => {
+      moxios.wait(() => {
+        const request = moxios.requests.mostRecent();
+        request.reject();
+      });
+      await store.dispatch(addIdea({ id: '123', content: 'new content 123' }));
+      expect(store.getActions()[2]).toEqual({
+        type: ADD_IDEA_FAILURE,
         error: DEFAULT_ERROR_MESSAGE
       });
     });

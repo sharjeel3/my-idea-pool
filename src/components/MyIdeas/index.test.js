@@ -116,4 +116,86 @@ describe('<MyIdeas />', () => {
     wrapper.find('Idea').prop('onEdit')(editProps);
     expect(updateIdeaSpy).toHaveBeenCalledWith(editProps);
   });
+
+  it('should call addNewIdeaScaffold on Add idea click', () => {
+    const addNewIdeaScaffoldSpy = jest.spyOn(ideasActions, 'addNewIdeaScaffold');
+    const store = mockStore({
+      ideas: {
+        content: []
+      }
+    });
+    const wrapper = mount(
+      <Provider store={store}>
+        <MyIdeas />
+      </Provider>
+    );
+    wrapper.find('AddIdea').find('button').simulate('click', new Event('click'));
+    expect(addNewIdeaScaffoldSpy).toHaveBeenCalledWith();
+  });
+
+  it('should call deleteNewIdeaScaffold on cancel add click', () => {
+    const deleteNewIdeaScaffoldSpy = jest.spyOn(ideasActions, 'deleteNewIdeaScaffold');
+    const store = mockStore({
+      ideas: {
+        content: [
+          {
+            id: '123',
+            content: 'i am an arc developer',
+            impact: 9,
+            ease: 9,
+            confidence: 9,
+            average_score: 9.0,
+            created_at: 1600334688
+          }
+        ]
+      }
+    });
+    const wrapper = mount(
+      <Provider store={store}>
+        <MyIdeas />
+      </Provider>
+    );
+
+    wrapper.find('Idea').prop('onAddCancel')('123');
+    expect(deleteNewIdeaScaffoldSpy).toHaveBeenCalledWith('123');
+  });
+
+  it('should call addIdea on confirm add click', () => {
+    const addIdeaSpy = jest.spyOn(ideasActions, 'addIdea');
+    const store = mockStore({
+      ideas: {
+        content: [
+          {
+            id: '123',
+            content: 'i am an arc developer',
+            impact: 9,
+            ease: 9,
+            confidence: 9,
+            average_score: 9.0,
+            created_at: 1600334688
+          }
+        ]
+      }
+    });
+    const wrapper = mount(
+      <Provider store={store}>
+        <MyIdeas />
+      </Provider>
+    );
+
+    wrapper.find('Idea').prop('onAddConfirm')({
+      id: '123',
+      content: 'i am an arc developer',
+      impact: 9,
+      ease: 9,
+      confidence: 9
+    });
+    expect(addIdeaSpy).toHaveBeenCalledWith({
+      id: '123',
+      content: 'i am an arc developer',
+      impact: 9,
+      ease: 9,
+      confidence: 9
+    });
+  });
 });

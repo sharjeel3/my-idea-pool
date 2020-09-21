@@ -3,6 +3,7 @@ import { Idea } from './Idea';
 import { shallow, mount } from 'enzyme';
 import { brandColors } from '../../ui-library/theme/colors';
 import 'jest-styled-components';
+import { EDIT } from '../../app/constants/idea';
 
 describe('<Idea />', () => {
   let props;
@@ -16,6 +17,8 @@ describe('<Idea />', () => {
       confidence: 7,
       average: 8.0,
       onDelete: jest.fn(),
+      onAddCancel: jest.fn(),
+      onAddConfirm: jest.fn(),
       onEdit: jest.fn()
     };
   });
@@ -74,6 +77,24 @@ describe('<Idea />', () => {
       wrapper.find({ id: 'cancel-edit-abc123' }).simulate('click', new Event('click'));
       expect(wrapper.find({ id: 'cancel-edit-abc123' })).not.toExist();
       expect(wrapper.find({ id: 'confirm-edit-abc123' })).not.toExist();
+    });
+
+    it('should call onAddCancel when cancel add button is clicked', () => {
+      wrapper.setProps({ mode: EDIT });
+      wrapper.find({ id: 'cancel-edit-abc123' }).simulate('click', new Event('click'));
+      expect(props.onAddCancel).toHaveBeenCalledWith('abc123');
+    });
+
+    it('should call onAddConfirm when confirm add button is clicked', () => {
+      wrapper.setProps({ mode: EDIT });
+      wrapper.find({ id: 'confirm-edit-abc123' }).simulate('click', new Event('click'));
+      expect(props.onAddConfirm).toHaveBeenCalledWith({
+        id: 'abc123',
+        content: 'i am an arc developer',
+        impact: 9,
+        ease: 8,
+        confidence: 7
+      });
     });
 
     it('should call onEdit when confirm edit button is clicked', () => {

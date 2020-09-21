@@ -4,9 +4,10 @@ import { brandColors } from '../../ui-library/theme/colors';
 import PropTypes from 'prop-types';
 import { ScoreInput } from './ScoreInput';
 import { TitleInput } from './TitleInput';
+import { EDIT, READ_ONLY } from '../../app/constants/idea';
 
 const Root = styled('div')`
-  border-bottom: 1px solid ${brandColors.lightGrey};
+  border-bottom: 1px solid ${brandColors.border};
   margin-bottom: 1em;
   display: flex;
 `;
@@ -74,16 +75,26 @@ const ActionButton = styled('button')`
   }
 `;
 
-const READ_ONLY = 'ReadOnly';
-const EDIT = 'Edit';
-
-export const Idea = ({ id, content, impact, ease, confidence, average, onDelete, onEdit }) => {
+export const Idea = ({
+  id,
+  content,
+  impact,
+  ease,
+  confidence,
+  average,
+  onDelete,
+  onAddCancel,
+  onAddConfirm,
+  onEdit,
+  mode: newIdeaMode
+}) => {
   const [mode, setMode] = useState(READ_ONLY);
   const [impactInput, setImpactInput] = useState(impact);
   const [easeInput, setEaseInput] = useState(ease);
   const [confidenceInput, setConfidenceInput] = useState(confidence);
   const [titleInput, setTitleInput] = useState(content);
-  const isEditMode = mode === 'Edit';
+  const isNewIdea = newIdeaMode === EDIT;
+  const isEditMode = mode === EDIT || isNewIdea;
 
   const handleDeleteClick = event => {
     event.preventDefault();
@@ -97,19 +108,32 @@ export const Idea = ({ id, content, impact, ease, confidence, average, onDelete,
 
   const handleConfirmClick = event => {
     event.preventDefault();
-    onEdit({
-      id,
-      impact: impactInput,
-      ease: easeInput,
-      confidence: confidenceInput,
-      content: titleInput
-    });
+    if (isNewIdea) {
+      onAddConfirm({
+        id,
+        impact: impactInput,
+        ease: easeInput,
+        confidence: confidenceInput,
+        content: titleInput
+      });
+    } else {
+      onEdit({
+        id,
+        impact: impactInput,
+        ease: easeInput,
+        confidence: confidenceInput,
+        content: titleInput
+      });
+    }
     setMode(READ_ONLY);
   };
 
   const handleCancelClick = event => {
     event.preventDefault();
     setMode(READ_ONLY);
+    if (isNewIdea) {
+      onAddCancel(id);
+    }
   };
 
   return (
@@ -197,10 +221,13 @@ export const Idea = ({ id, content, impact, ease, confidence, average, onDelete,
 Idea.propTypes = {
   id: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
+  mode: PropTypes.string,
   impact: PropTypes.number.isRequired,
   ease: PropTypes.number.isRequired,
   confidence: PropTypes.number.isRequired,
   average: PropTypes.number.isRequired,
   onEdit: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
+  onAddConfirm: PropTypes.func.isRequired,
+  onAddCancel: PropTypes.func.isRequired
 };
