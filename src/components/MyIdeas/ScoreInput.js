@@ -21,7 +21,7 @@ export const ScoreInput = ({ value, onChange }) => {
       maxLength="2"
       type="number"
       value={value}
-      onChange={event => onChange(event.target.value)}
+      onChange={event => onChange(Number(event.target.value))}
     />
   );
 };
