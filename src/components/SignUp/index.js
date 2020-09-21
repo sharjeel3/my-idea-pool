@@ -9,6 +9,7 @@ import { ErrorMessage } from '../../ui-library/ErrorMessage';
 import { getSignupErrorMessage, getSignupSuccess } from '../../redux/selectors/signup';
 import { withRouter } from 'react-router-dom';
 import { IDEAS } from '../../app/constants/routes';
+import { Title } from '../../ui-library/Title';
 
 export const SignUp = withRouter(({ history }) => {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ export const SignUp = withRouter(({ history }) => {
 
   return (
     <Container>
-      <h2>Sign Up</h2>
+      <Title title="Sign Up" />
       <Form onSubmit={handleFormSubmit}>
         <TextInput id="signup-name" required value={name} onChange={setName} placeholder="Name" />
         <TextInput

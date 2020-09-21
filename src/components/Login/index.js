@@ -9,6 +9,7 @@ import { ErrorMessage } from '../../ui-library/ErrorMessage';
 import { getLoginErrorMessage, getLoginSuccess } from '../../redux/selectors/auth';
 import { withRouter } from 'react-router-dom';
 import { IDEAS } from '../../app/constants/routes';
+import { Title } from '../../ui-library/Title';
 
 export const Login = withRouter(({ history }) => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ export const Login = withRouter(({ history }) => {
 
   return (
     <Container>
-      <h2>Login</h2>
+      <Title title="Login" />
       <Form onSubmit={handleFormSubmit}>
         <TextInput
           id="login-email"
