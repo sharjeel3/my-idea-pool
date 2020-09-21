@@ -1,8 +1,50 @@
-import { request } from '../../../libs/request';
-import { LOGIN_FAILURE, LOGIN_IN_PROGRESS, LOGIN_SUCCESS } from '../../actionTypes';
+import { request, secureRequest } from '../../../libs/request';
+import {
+  FETCH_USER_FAILURE,
+  FETCH_USER_IN_PROGRESS,
+  FETCH_USER_SUCCESS,
+  LOGIN_FAILURE,
+  LOGIN_IN_PROGRESS,
+  LOGIN_SUCCESS
+} from '../../actionTypes';
 import lodashGet from 'lodash.get';
 import { DEFAULT_ERROR_MESSAGE } from '../../../app/constants/errors';
 import { saveTokens } from '../signup';
+import { IP_ACCESS_TOKEN, IP_REFRESH_TOKEN } from '../../../app/constants/tokens';
+
+export const getAccessToken = () => {
+  return window.localStorage.getItem(IP_ACCESS_TOKEN);
+};
+
+export const getRefreshToken = () => {
+  return window.localStorage.getItem(IP_REFRESH_TOKEN);
+};
+
+export const fetchUser = () => async dispatch => {
+  try {
+    dispatch({ type: FETCH_USER_IN_PROGRESS, value: true });
+    const [error, response] = await secureRequest({
+      url: '/me'
+    });
+    dispatch({ type: FETCH_USER_IN_PROGRESS, value: false });
+    if (error) {
+      return dispatch({
+        type: FETCH_USER_FAILURE,
+        error: lodashGet(error, 'data.reason', DEFAULT_ERROR_MESSAGE)
+      });
+    }
+    const { email, name, avatar_url: avatarUrl } = response;
+    dispatch({
+      type: FETCH_USER_SUCCESS,
+      avatarUrl,
+      email,
+      name
+    });
+  } catch (e) {
+    dispatch({ type: FETCH_USER_IN_PROGRESS, value: false });
+    dispatch({ type: FETCH_USER_FAILURE, error: DEFAULT_ERROR_MESSAGE });
+  }
+};
 
 export const login = ({ email, password }) => async dispatch => {
   try {
@@ -27,6 +69,7 @@ export const login = ({ email, password }) => async dispatch => {
       jwt,
       refreshToken
     });
+    dispatch(fetchUser());
     dispatch({
       type: LOGIN_SUCCESS,
       jwt,

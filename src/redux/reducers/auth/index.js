@@ -1,5 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
+  FETCH_USER_SUCCESS,
   LOGIN_FAILURE,
   LOGIN_IN_PROGRESS,
   LOGIN_SUCCESS,
@@ -12,7 +13,13 @@ const INITIAL_STATE = {
   loginSuccess: false,
   loginError: '',
   jwt: '',
-  refreshToken: ''
+  refreshToken: '',
+  name: '',
+  email: '',
+  avatarUrl: '',
+  fetchUserInProgress: false,
+  fetchUserSuccess: false,
+  fetchUserError: ''
 };
 
 export const authReducer = createReducer(INITIAL_STATE, {
@@ -23,6 +30,12 @@ export const authReducer = createReducer(INITIAL_STATE, {
     state.loginSuccess = true;
     state.jwt = action.jwt;
     state.refreshToken = action.refreshToken;
+  },
+  [FETCH_USER_SUCCESS]: (state, action) => {
+    state.fetchUserSuccess = true;
+    state.name = action.name;
+    state.email = action.email;
+    state.avatarUrl = action.avatarUrl;
   },
   [LOGIN_FAILURE]: (state, action) => {
     state.loginError = action.error;

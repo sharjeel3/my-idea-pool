@@ -2,7 +2,12 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
 import { login } from './index';
-import { LOGIN_FAILURE, LOGIN_IN_PROGRESS, LOGIN_SUCCESS } from '../../actionTypes';
+import {
+  FETCH_USER_IN_PROGRESS,
+  LOGIN_FAILURE,
+  LOGIN_IN_PROGRESS,
+  LOGIN_SUCCESS
+} from '../../actionTypes';
 import { IP_ACCESS_TOKEN, IP_REFRESH_TOKEN } from '../../../app/constants/tokens';
 import { DEFAULT_ERROR_MESSAGE } from '../../../app/constants/errors';
 
@@ -39,6 +44,7 @@ describe('Login Action Creators', () => {
       expect(store.getActions()).toEqual([
         { type: LOGIN_IN_PROGRESS, value: true },
         { type: LOGIN_IN_PROGRESS, value: false },
+        { type: FETCH_USER_IN_PROGRESS, value: true },
         {
           type: LOGIN_SUCCESS,
           jwt: 'jwt',

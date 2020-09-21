@@ -8,6 +8,7 @@ export const brandColors = {
   border: 'rgba(42, 56, 66, 0.2)',
   border2: '#979797',
   white: '#ffffff',
+  offwhite: 'rgba(255, 255, 255, 0.2)',
   black: '#000000',
   blueviolet: 'blueviolet'
 };

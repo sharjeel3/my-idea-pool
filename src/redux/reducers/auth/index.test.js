@@ -1,5 +1,6 @@
 import { authReducer } from './index';
 import {
+  FETCH_USER_SUCCESS,
   LOGIN_FAILURE,
   LOGIN_IN_PROGRESS,
   LOGIN_SUCCESS,
@@ -14,7 +15,13 @@ describe('Auth Reducer', () => {
       loginSuccess: false,
       loginError: '',
       jwt: '',
-      refreshToken: ''
+      refreshToken: '',
+      name: '',
+      email: '',
+      avatarUrl: '',
+      fetchUserInProgress: false,
+      fetchUserSuccess: false,
+      fetchUserError: ''
     });
   });
 
@@ -39,6 +46,24 @@ describe('Auth Reducer', () => {
         loginSuccess: true,
         jwt: 'jwt',
         refreshToken: 'it is refreshing'
+      });
+    });
+  });
+
+  describe('FETCH_USER_SUCCESS', () => {
+    it('should return correct state', () => {
+      const action = {
+        type: FETCH_USER_SUCCESS,
+        value: true,
+        name: 'Alice',
+        email: 'dev@arc.test',
+        avatarUrl: 'http://test.com'
+      };
+      expect(authReducer({}, action)).toEqual({
+        fetchUserSuccess: true,
+        name: 'Alice',
+        email: 'dev@arc.test',
+        avatarUrl: 'http://test.com'
       });
     });
   });
