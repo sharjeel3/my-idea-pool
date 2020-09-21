@@ -5,12 +5,18 @@ import {
   FETCH_USER_SUCCESS,
   LOGIN_FAILURE,
   LOGIN_IN_PROGRESS,
-  LOGIN_SUCCESS
+  LOGIN_SUCCESS,
+  RESET_AUTH
 } from '../../actionTypes';
 import lodashGet from 'lodash.get';
 import { DEFAULT_ERROR_MESSAGE } from '../../../app/constants/errors';
 import { saveTokens } from '../signup';
 import { IP_ACCESS_TOKEN, IP_REFRESH_TOKEN } from '../../../app/constants/tokens';
+
+const removeTokensFromDevice = () => {
+  window.localStorage.removeItem(IP_ACCESS_TOKEN);
+  window.localStorage.removeItem(IP_REFRESH_TOKEN);
+};
 
 export const getAccessToken = () => {
   return window.localStorage.getItem(IP_ACCESS_TOKEN);
@@ -78,5 +84,28 @@ export const login = ({ email, password }) => async dispatch => {
   } catch (e) {
     dispatch({ type: LOGIN_IN_PROGRESS, value: false });
     dispatch({ type: LOGIN_FAILURE, error: DEFAULT_ERROR_MESSAGE });
+  }
+};
+
+const resetAuth = () => ({
+  type: RESET_AUTH
+});
+
+export const logout = () => async dispatch => {
+  try {
+    await secureRequest({
+      url: '/access-tokens',
+      method: 'DELETE',
+      data: {
+        refresh_token: getRefreshToken()
+      }
+    });
+    removeTokensFromDevice();
+    dispatch(resetAuth());
+    window.location.href = '/';
+  } catch (e) {
+    removeTokensFromDevice();
+    dispatch(resetAuth());
+    window.location.href = '/';
   }
 };

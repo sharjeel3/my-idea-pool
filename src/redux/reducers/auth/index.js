@@ -5,7 +5,8 @@ import {
   LOGIN_IN_PROGRESS,
   LOGIN_SUCCESS,
   UPDATE_ACCESS_TOKEN,
-  UPDATE_TOKENS
+  UPDATE_TOKENS,
+  RESET_AUTH
 } from '../../actionTypes';
 
 const INITIAL_STATE = {
@@ -46,5 +47,8 @@ export const authReducer = createReducer(INITIAL_STATE, {
   },
   [UPDATE_ACCESS_TOKEN]: (state, action) => {
     state.jwt = action.jwt;
+  },
+  [RESET_AUTH]: () => {
+    return { ...INITIAL_STATE };
   }
 });

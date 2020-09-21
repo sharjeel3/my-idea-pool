@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import { brandColors } from '../../ui-library/theme/colors';
 import { media } from '../../ui-library/theme/media';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getMyUserInfo } from '../../redux/selectors/auth';
+import { logout } from '../../redux/actions/auth';
 
 const Root = styled('div')`
   background-color: ${brandColors.green};
@@ -47,12 +48,31 @@ const User = styled('div')`
 `;
 
 const Name = styled('p')`
-  color: ${brandColors.white};
+  display: none;
+  ${media.greaterThan('lg')`
+    display: block;
+    color: ${brandColors.white};
+    font-size: 1.25em;
+    line-height: 1.15;
+    margin-bottom: 0.5em;
+  `}
+`;
+
+const Logout = styled('button')`
+  color: ${brandColors.lightGrey};
+  display: block;
+  margin: auto;
 `;
 
 export const WelcomeBar = () => {
   const { name, avatarUrl } = useSelector(getMyUserInfo);
+  const dispatch = useDispatch();
   const isLoggedIn = name && avatarUrl;
+
+  const handleLogoutClick = () => {
+    dispatch(logout());
+  };
+
   return (
     <Root>
       <MainLink href="/" title="The Idea Pool">
@@ -63,6 +83,7 @@ export const WelcomeBar = () => {
         <User>
           <Image id="user-avatar" src={avatarUrl} alt={name} />
           <Name>{name}</Name>
+          <Logout onClick={handleLogoutClick}>Log out</Logout>
         </User>
       )}
     </Root>
