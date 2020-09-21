@@ -7,7 +7,7 @@ import {
 } from '../../actionTypes';
 import lodashGet from 'lodash.get';
 import { DEFAULT_ERROR_MESSAGE } from '../../../app/constants/errors';
-import { saveTokens, updateTokens } from '../auth';
+import { fetchUser, saveTokens, updateTokens } from '../auth';
 
 export const resetSignup = () => ({
   type: RESET_SIGNUP
@@ -41,6 +41,7 @@ export const createAccount = ({ name, email, password }) => async dispatch => {
       type: SIGNUP_SUCCESS
     });
     dispatch(updateTokens({ jwt, refreshToken }));
+    dispatch(fetchUser());
   } catch (e) {
     dispatch({ type: SIGNUP_IN_PROGRESS, value: false });
     dispatch({ type: SIGNUP_FAILURE, error: DEFAULT_ERROR_MESSAGE });

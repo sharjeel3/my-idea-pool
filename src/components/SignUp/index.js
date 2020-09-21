@@ -31,7 +31,7 @@ export const SignUp = withRouter(({ history }) => {
 
   const validatePassword = password => {
     // 8 characters including 1 lowercase, 1 uppcase and 1 number
-    const regExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+    const regExp = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[\w~@#$%^&*+=|{}:;!.?()-]{8,}$/;
     const isValid = regExp.test(password);
     setPasswordError(
       isValid

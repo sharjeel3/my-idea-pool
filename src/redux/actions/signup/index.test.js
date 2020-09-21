@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import moxios from 'moxios';
 import { createAccount, resetSignup } from './index';
 import {
+  FETCH_USER_IN_PROGRESS,
   RESET_SIGNUP,
   SIGNUP_FAILURE,
   SIGNUP_IN_PROGRESS,
@@ -47,7 +48,8 @@ describe('Signup Action Creators', () => {
         { type: SIGNUP_IN_PROGRESS, value: true },
         { type: SIGNUP_IN_PROGRESS, value: false },
         { type: SIGNUP_SUCCESS },
-        { type: UPDATE_TOKENS, jwt: 'jwt', refreshToken: 'refresh token' }
+        { type: UPDATE_TOKENS, jwt: 'jwt', refreshToken: 'refresh token' },
+        { type: FETCH_USER_IN_PROGRESS, value: true }
       ]);
       expect(window.localStorage.setItem).toHaveBeenCalledWith(IP_ACCESS_TOKEN, 'jwt');
       expect(window.localStorage.setItem).toHaveBeenCalledWith(IP_REFRESH_TOKEN, 'refresh token');
