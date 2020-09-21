@@ -14,7 +14,9 @@ GlobalStyles.displayName = 'GlobalStyles';
 
 const Root = styled('div')`
   margin: 0 auto;
+  padding-bottom: 4em;
   ${media.greaterThan('lg')`
+    padding-bottom: 0;
     max-width: 960px;
     display: flex;
     min-height: 100vh;
