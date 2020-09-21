@@ -109,3 +109,32 @@ export const logout = () => async dispatch => {
     window.location.href = '/';
   }
 };
+
+export const refreshToken = () => dispatch => {
+  const localStorage = window.localStorage;
+  let interval;
+  const refreshToken = localStorage.getItem(IP_REFRESH_TOKEN);
+  const refreshFn = async refreshToken => {
+    const [error, response] = await request({
+      url: '/access-tokens/refresh',
+      method: 'POST',
+      data: {
+        refresh_token: refreshToken
+      }
+    });
+    if (error) {
+      removeTokensFromDevice();
+      clearInterval(interval);
+    } else if (response) {
+      localStorage.setItem(IP_ACCESS_TOKEN, response.jwt);
+    }
+  };
+  if (refreshToken) {
+    refreshFn(refreshToken);
+    dispatch(fetchUser());
+    interval = setInterval(() => {
+      refreshFn(refreshToken);
+      dispatch(fetchUser());
+    }, 540000);
+  }
+};
