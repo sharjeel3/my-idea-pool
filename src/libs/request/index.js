@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { IP_ACCESS_TOKEN } from '../../app/constants/tokens';
 
-const API_PATH = 'https://small-project-api.herokuapp.com/';
+const API_PATH = 'https://small-project-api.herokuapp.com';
 
 export const request = ({ method = 'get', url, data = {}, headers = {} }) => {
   return axios(`${API_PATH}${url}`, {

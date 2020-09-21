@@ -83,4 +83,37 @@ describe('<MyIdeas />', () => {
       options: { id: '1adzybiw21' }
     });
   });
+
+  it('should call updateIdea on edit click', () => {
+    const updateIdeaSpy = jest.spyOn(ideasActions, 'updateIdea');
+    const store = mockStore({
+      ideas: {
+        content: [
+          {
+            id: '1adzybiw21',
+            content: 'i am an arc developer',
+            impact: 9,
+            ease: 9,
+            confidence: 9,
+            average_score: 9.0,
+            created_at: 1600334688
+          }
+        ]
+      }
+    });
+    const wrapper = mount(
+      <Provider store={store}>
+        <MyIdeas />
+      </Provider>
+    );
+    const editProps = {
+      id: '1adzybiw21',
+      content: 'I am an arc developer',
+      impact: 10,
+      ease: 10,
+      confidence: 10
+    };
+    wrapper.find('Idea').prop('onEdit')(editProps);
+    expect(updateIdeaSpy).toHaveBeenCalledWith(editProps);
+  });
 });

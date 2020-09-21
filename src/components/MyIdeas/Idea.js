@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import { brandColors } from '../../ui-library/theme/colors';
 import PropTypes from 'prop-types';
+import { ScoreInput } from './ScoreInput';
+import { TitleInput } from './TitleInput';
 
 const Root = styled('div')`
   border-bottom: 1px solid ${brandColors.lightGrey};
@@ -14,10 +16,15 @@ const Score = styled('div')`
   justify-content: space-between;
   margin-bottom: 0.75em;
   font-size: 0.875em;
+  align-items: center;
+  min-height: 2.25em;
 `;
 
 const ScoreValue = styled('div')`
   color: ${brandColors.mediumGrey};
+  width: 4em;
+  padding: 0 0.5em;
+  line-height: 2.25em;
   ${props =>
     props.isAverage &&
     `
@@ -35,7 +42,9 @@ const ScoreTitle = styled('div')`
 `;
 
 const IdeaTitle = styled('div')`
-  margin-bottom: 1em;
+  min-height: 2.25em;
+  display: flex;
+  align-items: center;
 `;
 
 const IdeaContent = styled('div')`
@@ -51,9 +60,10 @@ const Actions = styled('div')`
 
 const ScoresWrap = styled('div')`
   padding-right: 10%;
+  padding-top: 1em;
 `;
 
-const EditButton = styled('button')`
+const ActionButton = styled('button')`
   border: 1px solid transparent;
   width: 1.75em;
   height: 1.75em;
@@ -64,44 +74,121 @@ const EditButton = styled('button')`
   }
 `;
 
-const DeleteButton = styled(EditButton)``;
+const READ_ONLY = 'ReadOnly';
+const EDIT = 'Edit';
 
-export const Idea = ({ id, content, impact, ease, confidence, average, onDelete }) => {
+export const Idea = ({ id, content, impact, ease, confidence, average, onDelete, onEdit }) => {
+  const [mode, setMode] = useState(READ_ONLY);
+  const [impactInput, setImpactInput] = useState(impact);
+  const [easeInput, setEaseInput] = useState(ease);
+  const [confidenceInput, setConfidenceInput] = useState(confidence);
+  const [titleInput, setTitleInput] = useState(content);
+  const isEditMode = mode === 'Edit';
+
   const handleDeleteClick = event => {
     event.preventDefault();
     onDelete(id);
   };
 
+  const handleEditClick = event => {
+    event.preventDefault();
+    setMode(EDIT);
+  };
+
+  const handleConfirmClick = event => {
+    event.preventDefault();
+    onEdit({
+      id,
+      impact: impactInput,
+      ease: easeInput,
+      confidence: confidenceInput,
+      content: titleInput
+    });
+    setMode(READ_ONLY);
+  };
+
+  const handleCancelClick = event => {
+    event.preventDefault();
+    setMode(READ_ONLY);
+  };
+
   return (
     <Root>
       <IdeaContent>
-        <IdeaTitle>{content}</IdeaTitle>
+        {isEditMode ? (
+          <TitleInput value={titleInput} onChange={setTitleInput} />
+        ) : (
+          <IdeaTitle>{titleInput}</IdeaTitle>
+        )}
         <ScoresWrap>
           <Score id={`impact-score-${id}`}>
             <ScoreTitle>Impact</ScoreTitle>
-            <ScoreValue>{impact}</ScoreValue>
+            {isEditMode ? (
+              <ScoreInput value={impactInput} onChange={setImpactInput} />
+            ) : (
+              <ScoreValue>{impactInput}</ScoreValue>
+            )}
           </Score>
           <Score id={`ease-score-${id}`}>
             <ScoreTitle>Ease</ScoreTitle>
-            <ScoreValue>{ease}</ScoreValue>
+            {isEditMode ? (
+              <ScoreInput value={easeInput} onChange={setEaseInput} />
+            ) : (
+              <ScoreValue>{easeInput}</ScoreValue>
+            )}
           </Score>
           <Score id={`confidence-score-${id}`}>
             <ScoreTitle>Confidence</ScoreTitle>
-            <ScoreValue>{confidence}</ScoreValue>
+            {isEditMode ? (
+              <ScoreInput value={confidenceInput} onChange={setConfidenceInput} />
+            ) : (
+              <ScoreValue>{confidenceInput}</ScoreValue>
+            )}
           </Score>
           <Score id={`average-score-${id}`}>
             <ScoreTitle isAverage>Avg.</ScoreTitle>
-            <ScoreValue isAverage>{parseInt(average, 10)}</ScoreValue>
+            <ScoreValue isAverage id={`average-score-value-${id}`}>
+              {parseInt(average, 10)}
+            </ScoreValue>
           </Score>
         </ScoresWrap>
       </IdeaContent>
       <Actions>
-        <EditButton>
-          <img src="/pen.png" alt="Edit" />
-        </EditButton>
-        <DeleteButton onClick={handleDeleteClick}>
-          <img src="/bin.png" alt="Edit" />
-        </DeleteButton>
+        {isEditMode ? (
+          <>
+            <ActionButton
+              id={`confirm-edit-${id}`}
+              key={`confirm-edit-${id}`}
+              onClick={handleConfirmClick}
+            >
+              <img src="/confirm.png" alt="Confirm" />
+            </ActionButton>
+            <ActionButton
+              id={`cancel-edit-${id}`}
+              key={`cancel-edit-${id}`}
+              onClick={handleCancelClick}
+            >
+              <img src="/cancel.png" alt="Cancel" />
+            </ActionButton>
+          </>
+        ) : (
+          <>
+            <ActionButton
+              id={`edit-button-${id}`}
+              key={`edit-button-${id}`}
+              onClick={handleEditClick}
+            >
+              <img src="/pen.png" alt="Edit" />
+            </ActionButton>
+            <ActionButton
+              id={`delete-button-${id}`}
+              key={`delete-button-${id}`}
+              onClick={handleDeleteClick}
+            >
+              <img src="/bin.png" alt="Delete" />
+            </ActionButton>
+          </>
+        )}
       </Actions>
     </Root>
   );
@@ -114,5 +201,6 @@ Idea.propTypes = {
   ease: PropTypes.number.isRequired,
   confidence: PropTypes.number.isRequired,
   average: PropTypes.number.isRequired,
+  onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired
 };

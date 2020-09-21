@@ -1,7 +1,7 @@
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import moxios from 'moxios';
-import { fetchIdeas, deleteIdea } from './index';
+import { fetchIdeas, deleteIdea, updateIdea } from './index';
 import {
   FETCH_IDEAS_SUCCESS,
   FETCH_IDEAS_IN_PROGRESS,
@@ -9,7 +9,10 @@ import {
   DELETE_IDEA_IN_PROGRESS,
   DELETE_IDEA_SUCCESS,
   DELETE_IDEA_FAILURE,
-  REFRESH_IDEAS
+  REFRESH_IDEAS,
+  UPDATE_IDEA_IN_PROGRESS,
+  UPDATE_IDEA_SUCCESS,
+  UPDATE_IDEA_FAILURE
 } from '../../actionTypes';
 import { DEFAULT_ERROR_MESSAGE } from '../../../app/constants/errors';
 
@@ -158,6 +161,78 @@ describe('Ideas Action Creators', () => {
       await store.dispatch(deleteIdea({ id: 'abc123' }));
       expect(store.getActions()[2]).toEqual({
         type: DELETE_IDEA_FAILURE,
+        error: DEFAULT_ERROR_MESSAGE
+      });
+    });
+  });
+
+  describe('updateIdea()', () => {
+    let store;
+    beforeEach(() => {
+      moxios.install();
+      store = mockStore({
+        auth: {},
+        ideas: {
+          content: [
+            { id: 'abc123', content: 'dev idea' },
+            { id: 'xyz987', content: 'new idea' },
+            { id: 'acd456', content: 'some idea' }
+          ]
+        }
+      });
+    });
+
+    afterEach(() => {
+      moxios.uninstall();
+    });
+
+    it('should return actions for successful deletion', async () => {
+      moxios.wait(() => {
+        const request = moxios.requests.mostRecent();
+        request.respondWith({
+          status: 200,
+          response: { id: 'xyz987', content: 'new content' }
+        });
+      });
+      await store.dispatch(updateIdea({ id: 'xyz987', content: 'new content' }));
+      expect(store.getActions()).toEqual([
+        { type: UPDATE_IDEA_IN_PROGRESS, value: true },
+        { type: UPDATE_IDEA_IN_PROGRESS, value: false },
+        { type: UPDATE_IDEA_SUCCESS, value: true },
+        {
+          type: REFRESH_IDEAS,
+          content: [
+            { id: 'abc123', content: 'dev idea' },
+            { id: 'xyz987', content: 'new content' },
+            { id: 'acd456', content: 'some idea' }
+          ]
+        }
+      ]);
+    });
+
+    it('should return actions for update error', async () => {
+      moxios.wait(() => {
+        const request = moxios.requests.mostRecent();
+        request.respondWith({
+          status: 400,
+          response: { reason: 'Invalid request' }
+        });
+      });
+      await store.dispatch(updateIdea({ id: 'abc123', content: 'new content' }));
+      expect(store.getActions()[2]).toEqual({
+        type: UPDATE_IDEA_FAILURE,
+        error: 'Invalid request'
+      });
+    });
+
+    it('should return actions for unexpected failure', async () => {
+      moxios.wait(() => {
+        const request = moxios.requests.mostRecent();
+        request.reject();
+      });
+      await store.dispatch(updateIdea({ id: 'abc123', content: 'new content' }));
+      expect(store.getActions()[2]).toEqual({
+        type: UPDATE_IDEA_FAILURE,
         error: DEFAULT_ERROR_MESSAGE
       });
     });

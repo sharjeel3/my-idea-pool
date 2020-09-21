@@ -6,7 +6,10 @@ import {
   FETCH_IDEAS_FAILURE,
   FETCH_IDEAS_IN_PROGRESS,
   FETCH_IDEAS_SUCCESS,
-  REFRESH_IDEAS
+  REFRESH_IDEAS,
+  UPDATE_IDEA_FAILURE,
+  UPDATE_IDEA_IN_PROGRESS,
+  UPDATE_IDEA_SUCCESS
 } from '../../actionTypes';
 import lodashGet from 'lodash.get';
 import { DEFAULT_ERROR_MESSAGE } from '../../../app/constants/errors';
@@ -68,6 +71,45 @@ export const deleteIdea = ({ id }) => async (dispatch, getState) => {
     dispatch({ type: DELETE_IDEA_IN_PROGRESS, value: false });
     dispatch({
       type: DELETE_IDEA_FAILURE,
+      error: DEFAULT_ERROR_MESSAGE
+    });
+  }
+};
+
+export const updateIdea = ({ id, content, impact, ease, confidence }) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({ type: UPDATE_IDEA_IN_PROGRESS, value: true });
+    const [error, response] = await secureRequest({
+      url: `/ideas/${id}`,
+      method: 'PUT',
+      data: { id, content, impact, ease, confidence }
+    });
+    dispatch({ type: UPDATE_IDEA_IN_PROGRESS, value: false });
+    if (error) {
+      return dispatch({
+        type: UPDATE_IDEA_FAILURE,
+        error: lodashGet(error, 'data.reason', DEFAULT_ERROR_MESSAGE)
+      });
+    }
+    const ideas = getMyIdeas(getState());
+    const updatedIdeas = ideas.map(idea => {
+      if (idea.id !== id) {
+        return idea;
+      }
+      return idea.id === id ? { ...response } : idea;
+    });
+    dispatch({
+      type: UPDATE_IDEA_SUCCESS,
+      value: true
+    });
+    dispatch(refreshIdeas(updatedIdeas));
+  } catch (e) {
+    dispatch({ type: UPDATE_IDEA_IN_PROGRESS, value: false });
+    dispatch({
+      type: UPDATE_IDEA_FAILURE,
       error: DEFAULT_ERROR_MESSAGE
     });
   }

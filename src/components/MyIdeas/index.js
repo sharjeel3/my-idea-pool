@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container } from '../../ui-library/Container';
-import { fetchIdeas } from '../../redux/actions/ideas';
+import { fetchIdeas, updateIdea } from '../../redux/actions/ideas';
 import { getMyIdeas } from '../../redux/selectors/ideas';
 import { Idea } from './Idea';
 import { showModal } from '../../redux/actions/modal';
@@ -27,6 +27,10 @@ export const MyIdeas = () => {
     );
   };
 
+  const handleEditConfirmClick = ({ id, impact, ease, confidence, content }) => {
+    dispatch(updateIdea({ id, impact, ease, confidence, content }));
+  };
+
   return (
     <Container>
       <h2>My Ideas</h2>
@@ -42,6 +46,7 @@ export const MyIdeas = () => {
             content={content}
             average={average}
             onDelete={handleDeleteClick}
+            onEdit={handleEditConfirmClick}
           />
         );
       })}
