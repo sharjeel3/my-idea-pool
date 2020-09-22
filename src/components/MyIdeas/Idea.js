@@ -58,7 +58,7 @@ const IdeaContent = styled('div')`
     flex-basis: 93%;
     display: flex;
     position: relative;
-    padding-left: 1em;
+    padding-left: 1.5em;
     &:before {
       content: ' ';
       width: 0.5em;
