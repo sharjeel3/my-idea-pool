@@ -23,12 +23,16 @@ const PAGE = 1;
 
 const Root = styled(Container)`
   ${media.greaterThan('lg')`
+    padding: 0 5%;
     ${props =>
       !props.hasIdeas &&
       `
       display: flex;
       flex-direction: column;
     `}
+  `}
+  ${media.greaterThan('xlg')`
+    padding: 0 9.5%;
   `}
 `;
 

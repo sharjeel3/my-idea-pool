@@ -151,4 +151,4 @@ This application requires much more work to become a polished My Ideas app. Here
 * Get My Ideas API can return the total number of pages and the current page number. We can use this for pagination. Pagination also requires more UX discussion on how the app would respond when a user has deleted a few ideas on page 2 of 3.   
 * Token API may provide the time the token will expire so we can decide when to renew it
 * Have noticed the My Ideas sorting is based on average score. This changes the position within view when user has edited an idea and performed a hard reload
-
+* Accessibility improvements can be added

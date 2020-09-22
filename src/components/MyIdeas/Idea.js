@@ -57,6 +57,19 @@ const IdeaContent = styled('div')`
   ${media.greaterThan('lg')`
     flex-basis: 93%;
     display: flex;
+    position: relative;
+    padding-left: 1em;
+    &:before {
+      content: ' ';
+      width: 0.5em;
+      height: 0.5em;
+      border-radius: 50%;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: ${brandColors.lightGrey};
+    }
   `}
   ${props => props.isHovering && `background: green;`}
 `;
