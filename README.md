@@ -140,7 +140,6 @@ This application requires much more work to become a polished My Ideas app. Here
 #### Must haves
 
 * The UX for adding or editing an idea needs to be improved. Currently there are issues with focus and have some sort of guard against wrong inputs from user
-* Missing UI elements such as My Ideas header for different scores inputs
 * Overall UI refinements to become closer to the mockups. This includes error states and loading state
 * Production build optimization may be enhanced using React Lazy or Loadable 
 * We can add better fonts
