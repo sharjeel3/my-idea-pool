@@ -28,6 +28,12 @@ const Score = styled('div')`
   `}
 `;
 
+const ConfidenceScore = styled(Score)`
+  ${media.greaterThan('lg')`
+    width: 7em;
+  `}
+`;
+
 const ScoreValue = styled('div')`
   color: ${brandColors.mediumGrey};
   width: 4em;
@@ -71,7 +77,6 @@ const IdeaContent = styled('div')`
       background: ${brandColors.lightGrey};
     }
   `}
-  ${props => props.isHovering && `background: green;`}
 `;
 
 const Actions = styled('div')`
@@ -204,14 +209,14 @@ export const Idea = ({
             <ScoreTitle>Ease</ScoreTitle>
             <ScoreInput isEditMode={isEditMode} value={easeInput} onChange={setEaseInput} />
           </Score>
-          <Score id={`confidence-score-${id}`}>
+          <ConfidenceScore id={`confidence-score-${id}`}>
             <ScoreTitle>Confidence</ScoreTitle>
             <ScoreInput
               isEditMode={isEditMode}
               value={confidenceInput}
               onChange={setConfidenceInput}
             />
-          </Score>
+          </ConfidenceScore>
           <Score id={`average-score-${id}`}>
             <ScoreTitle isAverage>Avg.</ScoreTitle>
             <ScoreValue isAverage id={`average-score-value-${id}`}>

@@ -17,6 +17,7 @@ import styled from 'styled-components/macro';
 import PropTypes from 'prop-types';
 import { media } from '../../ui-library/theme/media';
 import { getModalOptions, isDeleteIdeaModalActive } from '../../redux/selectors/modal';
+import { IdeaHeader } from './IdeaHeader';
 
 // Ideally API response should return total number of pages that we can use to paginate
 const PAGE = 1;
@@ -120,6 +121,7 @@ export const MyIdeas = () => {
           <div>Got Ideas?</div>
         </HasIdeasWrap>
       )}
+      <IdeaHeader />
       {ideas.map(idea => {
         const { id, ease, impact, confidence, average_score: average, content, mode } = idea;
         return (
